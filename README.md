@@ -35,10 +35,17 @@ Before running the API, make sure you have the following installed on your machi
 
 3. Once the server is running, you should see a message in the console saying "Server running on port 3000".
 
-You can interact with the API using GraphQL queries and mutations. 
-on  http://localhost:3000/graphql
+Certainly! Here's the provided text formatted for a GitHub README:
 
-1. **Create User**
+---
+
+## Interacting with the API
+
+You can interact with the API using GraphQL queries and mutations at [http://localhost:3000/graphql](http://localhost:3000/graphql).
+
+### Create User
+
+```graphql
 mutation {
   createUser(username: "your-username", email: "your-email@example.com", password: "your-password") {
     userId
@@ -46,8 +53,13 @@ mutation {
     tokenExpiration
   }
 }
+```
 
-2. **Login**
+Replace `"your-username"`, `"your-email@example.com"`, and `"your-password"` with your desired values.
+
+### Login
+
+```graphql
 mutation {
   login(usernameOrEmail: "your-username", password: "your-password") {
     userId
@@ -55,9 +67,16 @@ mutation {
     tokenExpiration
   }
 }
+```
 
-2. **Create Post** Note : set header Authorization : token
-   mutation {
+Replace `"your-username"` and `"your-password"` with your actual credentials.
+
+### Create Post
+
+**Note:** Set header `Authorization: token` before making this mutation.
+
+```graphql
+mutation {
   createPost(title: "Your Post Title", content: "Your post content goes here.") {
     _id
     title
@@ -70,6 +89,12 @@ mutation {
     createdAt
   }
 }
+```
 
-Additional Notes
-Make sure to handle authentication tokens securely in a production environment.
+Replace `"Your Post Title"` and `"Your post content goes here."` with your desired post details.
+
+### Additional Notes
+
+- Make sure to handle authentication tokens securely in a production environment.
+
+---
