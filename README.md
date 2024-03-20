@@ -35,8 +35,6 @@ Before running the API, make sure you have the following installed on your machi
 
 3. Once the server is running, you should see a message in the console saying "Server running on port 3000".
 
-Certainly! Here's the provided text formatted for a GitHub README:
-
 ---
 
 ## Interacting with the API
