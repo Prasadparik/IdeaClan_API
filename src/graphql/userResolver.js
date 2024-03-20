@@ -1,4 +1,3 @@
-// resolvers/userResolver.js
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
@@ -19,7 +18,6 @@ const userResolver = {
       // Checking if the email is already in use
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        console.log("existingUser IN RESOLVE >>", existingUser);
         throw new Error("Email is already in use");
       }
 
@@ -34,15 +32,12 @@ const userResolver = {
       });
       await user.save();
 
-      console.log("user IN RESOLVE >>", user);
-
       // Generate JWT token
       const token = jwt.sign(
         { userId: user._id, username: user.username },
         process.env.JWT_SECRET,
         { expiresIn: "1h" } // Token expiration time
       );
-      console.log("TOKEN IN RESOLVE >>", token);
 
       return {
         userId: user._id,
@@ -88,16 +83,12 @@ const userResolver = {
     try {
       const post = new Post({ title, content, author: user });
       await post.save();
-      console.log("NEW POST IN RESOLVER >>", { title, content, author: user });
 
       // Update the users posts array with new post ID
       await User.findByIdAndUpdate(user.id, { $push: { posts: post.id } });
 
-      console.log("User's posts array updated");
-
       return post;
     } catch (error) {
-      console.error("Error creating post:", error);
       throw new Error("Failed to create post");
     }
   },
