@@ -1,14 +1,15 @@
 const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
+const { ApolloServer } = require("apollo-server-express");
 const mongoose = require("mongoose");
-const schema = require("./src/graphql/schema");
-const userResolvers = require("./src/graphql/userResolver");
+const typeDefs = require("./src/graphql/schema");
+const resolvers = require("./src/graphql/resolver");
 const authMiddleware = require("./src/middleware/auth");
 
-const app = express();
+const MongoDBUrl =
+  "mongodb+srv://prasadparik18:cyQNX3FpO71lPEJ6@cluster0.kvnbncd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/social-media-db", {
+mongoose.connect(MongoDBUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -16,21 +17,26 @@ mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
 });
 
+const app = express();
+
 // authentication middleware
 app.use(authMiddleware);
 
-// GraphQL endpoint
-app.use(
-  "/graphql",
-  graphqlHTTP((req) => ({
-    schema,
-    rootValue: userResolvers,
-    graphiql: true,
-    context: { user: req.user },
-  }))
-);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => ({ user: req.user }),
+});
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Await server.start() before applying middleware
+async function startApolloServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+}
+
+startApolloServer().then(() => {
+  const PORT = 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });

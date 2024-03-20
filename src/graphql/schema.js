@@ -1,11 +1,10 @@
-const { buildSchema } = require("graphql");
+const { gql } = require("apollo-server-express");
 
-const schema = buildSchema(`
+const typeDefs = gql`
   type User {
     _id: ID!
     username: String!
     email: String!
-
   }
 
   type Post {
@@ -30,10 +29,9 @@ const schema = buildSchema(`
 
   type Mutation {
     createUser(username: String!, email: String!, password: String!): AuthData!
-	login(usernameOrEmail: String!, password: String!): AuthData!
+    login(usernameOrEmail: String!, password: String!): AuthData!
     createPost(title: String!, content: String!): Post
-	
   }
-`);
+`;
 
-module.exports = schema;
+module.exports = typeDefs;
